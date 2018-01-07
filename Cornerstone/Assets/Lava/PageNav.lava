@@ -1,4 +1,7 @@
+{% comment %}
 {% if Page.DisplayChildPages == 'true' and Page.Pages != empty %}
+
+
     <ul class="nav navbar-nav">
 
 		{% for childPage in Page.Pages %}
@@ -8,3 +11,38 @@
         {% endfor %}
     </ul>
 {% endif %}
+
+{% endcomment %}
+
+<style>
+ul.nav li.dropdown:hover ul.dropdown-menu{ display: block; }
+</style>
+<div class="collapse navbar-collapse">
+	{% if Page.DisplayChildPages == 'true' and Page.Pages != empty %}
+		<ul class="nav navbar-nav">
+		{% if childPage.Current == 'true' %}
+		<li class="dropdown"><a href="/"><strong>Home</strong></a></li>
+		{% else grandchildPage.Pages != empty%}
+		<li class="dropdown"><a href="/"><strong>Home</strong></a></li>
+		{% endif %}
+			{% for childPage in Page.Pages %}
+				{% if childPage.Current == 'true' %}
+					<li class="active dropdown">
+				{% else grandchildPage.Pages != empty%}
+					<li class="dropdown">
+				{% endif %}
+					<a class="dropdown-toggle" href="{{ childPage.Url }}"  ><strong>{{ childPage.Title | Dropcap }}</strong></a>
+						{% if childPage.DisplayChildPages == 'true' and childPage.Pages != empty %}
+							<ul  class="dropdown-menu" >
+								{% for grandchildPage in childPage.Pages %}
+									 <li>
+										<a role="menu-item" href="{{ grandchildPage.Url }}"><strong>{{ grandchildPage.Title}}</strong></a>
+									</li>
+								{% endfor %}
+							</ul>
+						{% endif %}							
+					</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+</div>
